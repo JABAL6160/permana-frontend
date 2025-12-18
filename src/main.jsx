@@ -9,7 +9,7 @@ import Register from './Register';
 import Map from './Map';
 import Data from './Data';
 import Cuaca from './Cuaca';
-import AdminDashboard from './admin/AdminDashboard';
+import AdminDashboard from './Admin/AdminDashboard';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
