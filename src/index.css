@@ -1,0 +1,13 @@
+:root {
+--bg: #f6f8fa;
+--side: #ffffff;
+--accent: #0b5fff;
+}
+
+
+html, body, #root {
+height: 100%;
+margin: 0;
+font-family: Inter, Roboto, Arial, sans-serif;
+background: var(--bg);
+}
