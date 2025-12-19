@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Eye, EyeOff, Shield } from "lucide-react";
+import { API_ENDPOINTS } from "./config"; // ✅ Import API config
 import "./Login.css";
 
 export default function Login() {
   const navigate = useNavigate();
   
-  // State untuk Staff Login
   const [staffUsername, setStaffUsername] = useState("");
   const [staffPassword, setStaffPassword] = useState("");
   const [showStaffPassword, setShowStaffPassword] = useState(false);
   
-  // State untuk Admin Login
   const [adminUsername, setAdminUsername] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [showAdminPassword, setShowAdminPassword] = useState(false);
@@ -19,9 +18,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // -----------------------------
-  // Akses Sebagai Tamu
-  // -----------------------------
   const handleGuestLogin = () => {
     const guestUser = {
       role: "guest",
@@ -31,9 +27,6 @@ export default function Login() {
     navigate("/");
   };
 
-  // -----------------------------
-  // Akses Sebagai Staff
-  // -----------------------------
   const handleStaffLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -45,7 +38,8 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      // ✅ Gunakan API_ENDPOINTS
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: staffUsername, password: staffPassword }),
@@ -53,9 +47,7 @@ export default function Login() {
 
       const data = await response.json();
 
-      // ✅ FIX: Gunakan data.user, bukan data.admins
       if (response.ok && data.success && data.user) {
-        // Cek apakah user adalah staff
         if (data.user.role === 'staff') {
           sessionStorage.setItem("user", JSON.stringify(data.user));
           navigate("/");
@@ -74,9 +66,6 @@ export default function Login() {
     }
   };
 
-  // -----------------------------
-  // Akses Sebagai Admin
-  // -----------------------------
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -88,7 +77,8 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      // ✅ Gunakan API_ENDPOINTS
+      const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: adminUsername, password: adminPassword }),
@@ -96,9 +86,7 @@ export default function Login() {
 
       const data = await response.json();
 
-      // ✅ FIX: Gunakan data.user, bukan data.admins
       if (response.ok && data.success && data.user) {
-        // Cek apakah user adalah admin
         if (data.user.role === 'admin') {
           sessionStorage.setItem("user", JSON.stringify(data.user));
           navigate("/");
@@ -117,9 +105,6 @@ export default function Login() {
     }
   };
 
-  // -----------------------------
-  // Render UI
-  // -----------------------------
   return (
     <div className="login-container">
       <div className="login-card">
@@ -131,7 +116,7 @@ export default function Login() {
         {error && <div className="error-message">{error}</div>}
 
         <div className="login-options three-columns">
-          {/* ==================== GUEST LOGIN ==================== */}
+          {/* GUEST LOGIN */}
           <div className="login-option guest">
             <h2>Akses Sebagai Tamu</h2>
             <p>View peta dan search lokasi</p>
@@ -142,16 +127,12 @@ export default function Login() {
               <li>✗ Tidak bisa edit/hapus</li>
               <li>✗ Tidak bisa lihat ODP Ports</li>
             </ul>
-            <button
-              className="btn-guest"
-              onClick={handleGuestLogin}
-              disabled={loading}
-            >
+            <button className="btn-guest" onClick={handleGuestLogin} disabled={loading}>
               Masuk Sebagai Tamu
             </button>
           </div>
 
-          {/* ==================== STAFF LOGIN ==================== */}
+          {/* STAFF LOGIN */}
           <div className="login-option staff">
             <h2>Akses Staff</h2>
             <p>Kelola data tiang dan peta</p>
@@ -187,16 +168,11 @@ export default function Login() {
                 </button>
               </div>
 
-              <button
-                type="submit"
-                className="btn-staff"
-                disabled={loading}
-              >
+              <button type="submit" className="btn-staff" disabled={loading}>
                 {loading ? "Loading..." : "Login Staff"}
               </button>
             </form>
 
-            {/* ✅ TOMBOL REGISTER DIPINDAH KE STAFF */}
             <div className="register-section">
               <p className="register-text">Belum punya akun staff?</p>
               <button
@@ -218,7 +194,7 @@ export default function Login() {
             </ul>
           </div>
 
-          {/* ==================== ADMIN LOGIN ==================== */}
+          {/* ADMIN LOGIN */}
           <div className="login-option admin">
             <h2>Akses Admin</h2>
             <p>Full control & administrator panel</p>
@@ -254,16 +230,11 @@ export default function Login() {
                 </button>
               </div>
 
-              <button
-                type="submit"
-                className="btn-admin"
-                disabled={loading}
-              >
+              <button type="submit" className="btn-admin" disabled={loading}>
                 {loading ? "Loading..." : "Login Admin"}
               </button>
             </form>
 
-            {/* ✅ INFO UNTUK ADMIN (tidak ada register) */}
             <div className="admin-info">
               <p className="info-text">
                 🔒 Akun Admin bersifat absolute dan tidak dapat didaftarkan sendiri.
@@ -281,11 +252,7 @@ export default function Login() {
         </div>
 
         <div className="login-footer">
-          <button
-            className="btn-back"
-            onClick={() => navigate("/")}
-            disabled={loading}
-          >
+          <button className="btn-back" onClick={() => navigate("/")} disabled={loading}>
             ← Kembali ke Dashboard
           </button>
         </div>
