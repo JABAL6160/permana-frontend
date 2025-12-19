@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Lock, Mail, FileText, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { API_ENDPOINTS } from "./config";
 import "./Register.css";
 
 export default function Register() {
@@ -64,7 +65,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/staff/register", {
+      const response = await fetch(API_ENDPOINTS.REGISTER, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -12,6 +12,8 @@ import {
   Moon
 } from 'lucide-react';
 import './Data.css';
+import { API_ENDPOINTS } from "./config";
+
 
 export default function Data() {
   const navigate = useNavigate();
@@ -68,7 +70,7 @@ export default function Data() {
         const types = ['odp', 'odc', 'pop'];
         const results = await Promise.all(
           types.map(type =>
-            fetch(`http://localhost:5000/api/poles/${type}`)
+            fetch(API_ENDPOINTS.POLES(type))
               .then(res => res.json())
               .catch(() => [])
           )
